@@ -163,9 +163,9 @@
   .main-nav { margin-left: auto; display: flex; align-items: center; gap: 36px; }
   .main-nav a { font-size: 13px; color: var(--foreground); text-decoration: none; font-weight: 500; }
   .main-nav a:hover, .site-footer a:hover { color: var(--chart-2); }
-  .header-cta, .next-section button { background: var(--brand); color: var(--primary-foreground); border-radius: 4px; gap: 10px; }
-  .header-cta:hover, .next-section button:hover { background: var(--chart-2); }
-  .mobile-menu { display: none; }
+  .pathloom-page .header-cta, .pathloom-page .next-section button { background: var(--brand); color: var(--primary-foreground); border-radius: 4px; gap: 10px; }
+  .pathloom-page .header-cta:hover, .pathloom-page .next-section button:hover { background: var(--chart-2); }
+  .site-header .mobile-menu { display: none; }
   .hero { position: relative; min-height: min(650px, 76vh); background: var(--hero); color: var(--primary-foreground); overflow: hidden; }
   .hero-image, .hero-shade { position: absolute; inset: 0; height: 100%; width: 100%; }
   .hero-image { object-fit: cover; object-position: center 40%; }
@@ -242,7 +242,7 @@
   .shell { width: min(100% - 36px, 500px); }
   .header-inner { height: 68px; }
   .brand { font-size: 24px; }
-  .mobile-menu { display: inline-flex; margin-left: auto; }
+  .site-header .mobile-menu { display: inline-flex; margin-left: auto; }
   .main-nav { display: none; position: absolute; top: 68px; left: 0; right: 0; padding: 20px 18px; background: var(--background); border-bottom: 1px solid var(--border); box-shadow: 0 10px 15px oklch(0.1 0 0 / .09); }
   .main-nav.is-open { display: flex; flex-direction: column; align-items: stretch; }
   .main-nav a { font-size: 15px; padding-block: 7px; }
