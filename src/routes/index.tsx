@@ -1,213 +1,102 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import {
-  ArrowRight,
-  Bell,
-  BookOpen,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  GraduationCap,
-  Landmark,
-  Menu,
-  MessageCircle,
-  Search,
-  Share2,
-  SlidersHorizontal,
-  Sparkles,
-  Stethoscope,
-  X,
-} from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, BookOpen, Compass, GraduationCap, Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import campus from "@/assets/futurefield-campus.jpg";
+import guidance from "@/assets/futurefield-guidance.jpg";
+import discovery from "@/assets/futurefield-discovery.jpg";
+import planning from "@/assets/futurefield-planning.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Careers360 — Empowering Students, Building Futures" },
-      {
-        name: "description",
-        content: "Discover colleges, exams, courses, counselling and career opportunities with Careers360.",
-      },
-      { property: "og:title", content: "Careers360 — Empowering Students, Building Futures" },
-      {
-        property: "og:description",
-        content: "Search colleges, exams and courses, compare options and plan your future with Careers360.",
-      },
+      { title: "Pathloom — Find a direction that feels like yours" },
+      { name: "description", content: "Explore fields of study, think through your options, and take your next step with clarity at Pathloom." },
+      { property: "og:title", content: "Pathloom — Find a direction that feels like yours" },
+      { property: "og:description", content: "A fresh space to explore study paths and make thoughtful education choices." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: CareersHome,
+  component: Home,
 });
 
-const news = [
-  {
-    image: "/images/careers360/news-cbse.jpg",
-    tag: "Live",
-    title: "CBSE Date Sheet 2027 LIVE: Class 10, 12 exam dates announcement soon at cbse.gov.in",
-    time: "September 28, 2026, 11:00 PM IST",
-  },
-  {
-    image: "/images/careers360/news-court.jpg",
-    title: "Mumbai: 12 get 6 months in jail for attacking teacher in civic school",
-    time: "September 28, 2026, 10:28 PM IST",
-  },
-  {
-    image: "/images/careers360/news-minister.jpg",
-    title: "Pralhad Joshi, French higher edu minister hold talks on strengthening research",
-    time: "September 28, 2026, 10:22 PM IST",
-  },
+const pathways = [
+  { title: "Explore your interests", category: "DISCOVER", copy: "Start with the subjects that keep you curious. See where those interests could lead.", image: discovery, alt: "Students working through ideas together", id: "interests", topics: ["Design", "Technology", "Humanities"] },
+  { title: "Talk it through", category: "REFLECT", copy: "Good questions make big decisions easier. Prepare for a meaningful conversation about your plans.", image: guidance, alt: "Student and advisor discussing study options", id: "guidance", topics: ["Guidance", "Questions", "Choices"] },
+  { title: "Make a plan", category: "MOVE FORWARD", copy: "Turn a broad ambition into smaller, practical steps you can take at your own pace.", image: planning, alt: "Student reviewing notes and planning studies", id: "planning", topics: ["Planning", "Applications", "Study"] },
 ];
 
-const navItems = [
-  ["Engineering", GraduationCap],
-  ["Medicine", Stethoscope],
-  ["Design", Sparkles],
-  ["Law", Landmark],
-  ["Management and Business Administration", BookOpen],
-  ["University", Landmark],
-  ["Others", SlidersHorizontal],
-  ["School", GraduationCap],
-] as const;
+const topics = ["Engineering", "Medicine", "Design", "Law", "Business", "Humanities", "Science", "Education"];
 
-const predictorLinks = ["JEE Main", "GATE", "NEET", "NEET PG", "MHT CET", "CLAT"];
-const examLinks = ["JEE Main", "GATE", "CAT", "CLAT", "NEET", "BITSAT", "CUET", "VITEEE"];
-
-function CareersHome() {
+function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [newsIndex, setNewsIndex] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-
-  const activeNews = useMemo(
-    () =>
-      Array.from({ length: 3 }, (_, offset) => news[(newsIndex + offset) % news.length]).filter(
-        (item): item is (typeof news)[number] => Boolean(item),
-      ),
-    [newsIndex],
+  const [searched, setSearched] = useState(false);
+  const matches = pathways.filter((pathway) =>
+    [pathway.title, pathway.copy, ...pathway.topics].some((item) => item.toLowerCase().includes(query.trim().toLowerCase())),
   );
-
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmitted(true);
-  };
+  const matchingTopics = topics.filter((topic) => topic.toLowerCase().includes(query.trim().toLowerCase()));
+  const hasSearch = searched && query.trim().length > 0;
 
   return (
-    <div className="careers-page">
+    <div className="pathloom-page">
       <header className="site-header">
-        <div className="topbar shell">
-          <Button className="mobile-menu" variant="ghost" size="icon" onClick={() => setMobileOpen((open) => !open)} aria-label="Open menu">
-            {mobileOpen ? <X /> : <Menu />}
-          </Button>
-          <a className="brand" href="/" aria-label="Careers360 home">
-            <span>CAREERS</span><b>360</b>
-          </a>
-          <form className="header-search" onSubmit={handleSearch}>
-            <Search aria-hidden="true" />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search Colleges, Exams, Schools & more" aria-label="Search colleges, exams and schools" />
-          </form>
-          <div className="header-actions">
-            <Button variant="ghost" size="icon" aria-label="Messages"><MessageCircle /></Button>
-            <span className="action-divider" />
-            <Button variant="ghost" size="icon" aria-label="Share"><Share2 /></Button>
-            <Button className="login-button" size="sm">Login</Button>
-          </div>
+        <div className="shell header-inner">
+          <a href="/" className="brand" aria-label="Pathloom home"><span className="brand-symbol" aria-hidden="true">✳</span> pathloom<span className="brand-period">.</span></a>
+          <nav className={`main-nav ${menuOpen ? "is-open" : ""}`} aria-label="Main navigation">
+            <a href="#paths" onClick={() => setMenuOpen(false)}>Explore paths</a>
+            <a href="#approach" onClick={() => setMenuOpen(false)}>How to begin</a>
+            <a href="#next-step" onClick={() => setMenuOpen(false)}>Your next step</a>
+          </nav>
+          <Button asChild className="header-cta"><a href="#paths">Start exploring <ArrowRight size={16} /></a></Button>
+          <Button variant="ghost" size="icon" className="mobile-menu" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
         </div>
-        <nav className={`category-nav ${mobileOpen ? "is-open" : ""}`} aria-label="Explore categories">
-          <div className="category-inner shell">
-            {navItems.map(([label, Icon]) => (
-              <a href="#explore" className="category-link" key={label}>
-                <Icon aria-hidden="true" /> <span>{label}</span><ChevronDown aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-        </nav>
       </header>
 
       <main>
-        <section className="hero-section">
-          <div className="hero-content shell">
-            <div className="hero-copy">
-              <p className="eyebrow">Your future starts here</p>
-              <h1>Empowering Students<br />Building Futures</h1>
-              <form className="hero-search" onSubmit={handleSearch}>
-                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search Colleges, Exams, Courses & more" aria-label="Search colleges, exams and courses" />
-                <Button type="submit" variant="ghost" size="icon" aria-label="Search"><Search /></Button>
+        <section className="hero" aria-labelledby="hero-title">
+          <img className="hero-image" src={campus} alt="Students walking together on a university campus" width={1600} height={1008} />
+          <div className="hero-shade" />
+          <div className="shell hero-inner">
+            <div className="hero-content">
+              <p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> A place to start figuring it out</p>
+              <h1 id="hero-title">Your next chapter<br />starts with curiosity.</h1>
+              <p className="hero-lede">There isn’t one right path. Explore what interests you, ask better questions, and move forward on your own terms.</p>
+              <form className="hero-search" onSubmit={(event) => { event.preventDefault(); setSearched(true); }}>
+                <Search size={19} aria-hidden="true" />
+                <input value={query} onChange={(event) => { setQuery(event.target.value); setSearched(false); }} placeholder="Try design, science, or planning" aria-label="Search topics" />
+                <Button type="submit" size="icon" aria-label="Search topics"><ArrowRight size={18} /></Button>
               </form>
-              {submitted && <p className="search-result">Showing results for <strong>{query || "your search"}</strong></p>}
-              <div className="popular-links">
-                <a href="#predictors"><span>POPULAR</span>JEE Main College Predictor</a>
-                <a href="#predictors"><span>POPULAR</span>NEET College Predictor</a>
-              </div>
+              {hasSearch && <div className="search-results" role="status">
+                <strong>Explore “{query.trim()}”</strong>
+                {matchingTopics.length || matches.length ? <div className="result-links">
+                  {matchingTopics.map((topic) => <a href="#topics" key={topic}>{topic} <ArrowRight size={14} /></a>)}
+                  {matches.map((pathway) => <a href={`#${pathway.id}`} key={pathway.id}>{pathway.title} <ArrowRight size={14} /></a>)}
+                </div> : <p>No matches here yet. Try a broader subject or browse the paths below.</p>}
+              </div>}
             </div>
-            <div className="predictor-visual">
-              <img src="/images/careers360/predictor.avif" alt="College predictor dashboard" />
-            </div>
-          </div>
-          <div className="hero-dots"><i /><i className="active" /><i /></div>
-          <NewsStrip items={activeNews} onNext={() => setNewsIndex((index) => (index + 1) % news.length)} onPrevious={() => setNewsIndex((index) => (index + news.length - 1) % news.length)} />
-        </section>
-
-        <section className="feature-section shell" id="explore">
-          <SectionHeading title="Counselling" copy="We ease your biggest doubts with personalized Video Counselling from our Curated Experts and Answers from the student community" />
-          <div className="feature-grid counselling-grid">
-            <img className="feature-illustration" src="/images/careers360/counselling.png" alt="Students exploring colleges" />
-            <div className="feature-card-stack">
-              <InfoCard icon={<GraduationCap />} title="Expert Counselling" copy="Get personalized guidance from expert counsellors - choose your stream to get started." links={["ENGINEERING UG", "MEDICINE UG"]} />
-              <InfoCard icon={<MessageCircle />} title="QnA" copy="1 Million+ Questions answered by the student community within 24 hours each" links={["ASK NOW"]} />
-            </div>
+            <span className="hero-caption">THE JOURNEY IS YOURS TO SHAPE</span>
           </div>
         </section>
 
-        <section className="feature-band" id="predictors">
-          <div className="feature-section shell">
-            <SectionHeading title="Data" copy="We simplify information for you on over 40,673 Colleges, 674 Exams and 355,172 Courses across domains and regions all over India" />
-            <div className="feature-grid data-grid">
-              <div className="data-list">
-                <InfoCard icon={<Landmark />} title="Rankings" copy="1,500 Colleges Ranked based on transparent, accurate, government-approved, student-friendly data" links={["Top Engineering Colleges", "Top MBA Colleges", "Top Law Colleges"]} />
-                <InfoCard icon={<BookOpen />} title="Exams" copy="Easy information and downloads on exam preparation, dates, counselling, syllabus and more" links={examLinks} />
-              </div>
-              <img className="feature-illustration" src="/images/careers360/data.png" alt="College and course data" />
-            </div>
-          </div>
+        <section className="topics-band" id="topics" aria-label="Areas to explore">
+          <div className="shell topics-inner"><span>WHAT SPARKS YOUR INTEREST?</span><div className="topics-list">{topics.map((topic) => <a href="#paths" key={topic}>{topic} <ArrowRight size={13} /></a>)}</div></div>
         </section>
 
-        <section className="feature-section shell prediction-section">
-          <SectionHeading title="Prediction" copy="We predict your College admission chances and Ranks based on years of historical data and advanced Analytics to help you plan in advance" />
-          <div className="feature-grid prediction-grid">
-            <img className="feature-illustration" src="/images/careers360/prediction.png" alt="College admission prediction" />
-            <div className="data-list">
-              <InfoCard icon={<Sparkles />} title="College Predictors" copy="Know your College Admission chances at the course-level based on domicile, caste, gender etc" links={predictorLinks} />
-              <InfoCard icon={<SlidersHorizontal />} title="Rank Predictors" copy="Predict your Rank before the actual results based on your performance in the exam and get in-depth insights" links={["JEE Main Rank Predictor", "GATE Score Predictor", "NEET Rank Predictor"]} />
-            </div>
-          </div>
+        <section className="paths-section shell" id="paths">
+          <div className="section-intro"><div><p className="eyebrow">FIND YOUR WAY</p><h2>Start wherever you are.</h2></div><p>You don't need all the answers today. Pick a starting point and see what opens up.</p></div>
+          <div className="path-grid">{pathways.map((pathway, index) => <article className="path-item" id={pathway.id} key={pathway.id}>
+            <div className="path-image"><img src={pathway.image} alt={pathway.alt} width={1008} height={768} loading="lazy" /></div>
+            <div className="path-text"><span className="path-number">0{index + 1} / {pathway.category}</span><h3>{pathway.title}</h3><p>{pathway.copy}</p><a href="#next-step" aria-label={`Learn more about ${pathway.title}`}>Take the next step <ArrowRight size={17} /></a></div>
+          </article>)}</div>
         </section>
 
-        <section className="course-section">
-          <div className="shell course-inner">
-            <div><p className="eyebrow">Learn and grow</p><h2>Online Courses<br />and Certifications</h2><p>Upskill and reskill to empower your career journey with Online Courses and Certifications</p><Button>Explore Courses <ArrowRight /></Button></div>
-            <div className="course-tags"><span>Digital marketing</span><span>Cyber Security</span><span>Artificial Intelligence</span><span>Business Analytics</span><span>Data Science</span><span>Machine Learning</span></div>
-          </div>
-        </section>
+        <section className="approach-section" id="approach"><div className="shell approach-inner"><div className="approach-heading"><p className="eyebrow">A SIMPLE WAY IN</p><h2>Small questions.<br /><em>Clearer choices.</em></h2></div><div className="approach-steps"><div><Compass aria-hidden="true" /><h3>Notice what draws you in</h3><p>Think about the problems, subjects, and activities you naturally return to.</p></div><div><BookOpen aria-hidden="true" /><h3>Look beyond the name</h3><p>Explore what a subject actually involves before deciding whether it fits.</p></div><div><GraduationCap aria-hidden="true" /><h3>Keep your options open</h3><p>Compare a few possibilities and check the latest details with each institution.</p></div></div></div></section>
 
-        <section className="impact-section shell">
-          <SectionHeading title="Our Impact" copy="Real stories of students and parents who turned career dreams into reality with Careers360's expert counselling and informed guidance." />
-          <div className="impact-tabs"><Button variant="outline">Video Stories</Button><Button variant="ghost">Written Reviews</Button></div>
-        </section>
+        <section className="next-section shell" id="next-step"><div className="next-mark" aria-hidden="true">✳</div><p className="eyebrow">YOUR NEXT STEP</p><h2>It’s okay to begin<br />without a perfect plan.</h2><p>Every meaningful direction starts somewhere. Explore a field, talk to someone you trust, and keep asking questions.</p><Button asChild><a href="#paths">Explore the paths <ArrowRight size={17} /></a></Button></section>
       </main>
-      <footer className="footer"><div className="shell footer-inner"><a className="brand" href="/"><span>CAREERS</span><b>360</b></a><p>Empowering students to make informed career decisions.</p><Button variant="outline">Download Careers360 App</Button></div></footer>
+      <footer className="site-footer"><div className="shell footer-inner"><a href="/" className="brand"><span className="brand-symbol" aria-hidden="true">✳</span> pathloom<span className="brand-period">.</span></a><p>An independent space for thoughtful education exploration. Always confirm admissions information with official sources.</p><a href="#hero-title">Back to top ↑</a></div></footer>
     </div>
   );
-}
-
-function NewsStrip({ items, onNext, onPrevious }: { items: typeof news; onNext: () => void; onPrevious: () => void }) {
-  return <div className="news-strip shell"><div className="news-heading"><strong>Latest News and Notifications</strong><a href="#news">View All</a></div><div className="news-items">{items.map((item) => <a className="news-item" href="#news" key={item.title}><img src={item.image} alt="" /><div><strong>{item.tag && <em>{item.tag}</em>}{item.title}</strong><small>{item.time}</small></div></a>)}</div><Button variant="outline" size="icon" className="news-next" onClick={onNext} aria-label="Next news"><ChevronRight /></Button><Button variant="outline" size="icon" className="news-prev" onClick={onPrevious} aria-label="Previous news"><ChevronLeft /></Button></div>;
-}
-
-function SectionHeading({ title, copy }: { title: string; copy: string }) {
-  return <div className="section-heading"><h2>{title}</h2><p>{copy}</p></div>;
-}
-
-function InfoCard({ icon, title, copy, links }: { icon: React.ReactNode; title: string; copy: string; links: string[] }) {
-  return <article className="info-card"><div className="info-title">{icon}<h3>{title}</h3></div><p>{copy}</p><div className="info-links">{links.map((link) => <a href="#explore" key={link}>{link} <ArrowRight /></a>)}</div></article>;
 }
