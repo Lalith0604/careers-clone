@@ -80,7 +80,10 @@ function CareersHome() {
   const [submitted, setSubmitted] = useState(false);
 
   const activeNews = useMemo(
-    () => Array.from({ length: 3 }, (_, offset) => news[(newsIndex + offset) % news.length]),
+    () =>
+      Array.from({ length: 3 }, (_, offset) => news[(newsIndex + offset) % news.length]).filter(
+        (item): item is (typeof news)[number] => Boolean(item),
+      ),
     [newsIndex],
   );
 
