@@ -142,13 +142,6 @@ function CareersHome() {
             </div>
             <div className="predictor-visual">
               <img src="/images/careers360/predictor.avif" alt="College predictor dashboard" />
-              <div className="visual-copy">
-                <p>Turn Your <strong>Score</strong> into<br /><strong>College Opportunities</strong></p>
-                <small>Predict your admission chances across<br />colleges based on exam performance,<br />category, and preferences.</small>
-                <Button>Explore College Predictors <ArrowRight /></Button>
-              </div>
-              <div className="verified-pill">✦ &nbsp;<strong>Verified Data</strong><small>Official counselling</small></div>
-              <div className="cutoff-card"><strong>Cutoff Trend</strong><small>Last 3 years</small><div className="bars"><i /><i /><i /><i /><i /></div></div>
             </div>
           </div>
           <div className="hero-dots"><i /><i className="active" /><i /></div>
